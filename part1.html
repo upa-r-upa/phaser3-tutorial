@@ -85,6 +85,42 @@
         player.anims.play('turn');
 
         gameOver = true;
+
+
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        
+        this.add.text(width / 2, height / 2 - 60, 'GAME OVER', {
+            fontSize: '48px',
+            fontFamily: 'Arial',
+            color: '#ff0000'
+        });
+        this.add.text(width / 2, height / 2, 'Score: ' + score, {
+            fontSize: '32px',
+            fontFamily: 'Arial',
+            color: '#000000'
+        });
+        var restartButton = this.add.text(width / 2, height / 2 + 60, 'RESTART', {
+            fontSize: '28px',
+            fontFamily: 'Arial',
+            backgroundColor: '#000000',
+            color: '#ffffff',
+            padding: { x: 16, y: 8 }
+        });
+
+        restartButton.setInteractive({ useHandCursor: true })
+        .on('pointerover', () => {
+            restartButton.setStyle({ backgroundColor: '#333333' });
+        })
+        .on('pointerout', () => {
+            restartButton.setStyle({ backgroundColor: '#000000' });
+        })
+        .on('pointerup', () => {
+            score = 0;
+            gameOver = false;
+
+            this.scene.restart();
+        });
     }
 
     function create ()
@@ -159,6 +195,10 @@
 
     function update ()
     {
+        if (gameOver) {
+            return;
+        }
+
         if (cursors.left.isDown)
         {
             player.setVelocityX(-160);
@@ -177,11 +217,13 @@
 
             player.anims.play('turn');
         }
+        
 
         if (cursors.up.isDown && player.body.touching.down) 
         {
             player.setVelocityY(-330);
         }
+        
     }
 
 </script>
